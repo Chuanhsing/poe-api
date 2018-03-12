@@ -32,6 +32,225 @@ components:
         - Hardcore
         - Abyss
         - Hardcore Abyss
+    Item:
+      type: object
+      properties:
+        verified: 
+          type: boolean
+          description: true if the item has not changed since it was linked.
+        w:
+          type: number
+          description: Width of the item in inventory tiles.
+        h:
+          type: number
+          description: Height of the item in inventory tiles.
+        ilvl:
+          type: number
+          description: item level
+        icon:
+          type: string
+          description: url to the image of the item
+        league:
+          type: string
+          description: league identifier
+        id:
+          type: string
+          format: uuid
+        elder:
+          type: boolean
+          description: true if the item can have elder mods (elder background).
+        shaper:
+          type: boolean
+          description: true if the item can have shaper mods (shaper background).
+        sockets:
+          type: object
+          properties:
+            group:
+              type: number
+              description: Every socket that has the same group is linked.
+            attr:
+              description: attributes e.g. dex, int, strength
+              anyOf:
+                - type: string
+                  enum: 
+                    - D
+                    - I
+                    - S
+                  description: >
+                    Possible values:
+                      * `D` - dexterity
+                      * `I` - intelligence
+                      * `S` - strength
+                - type: boolean
+                  description: abyss sockets don't have attributes
+            sColour:
+              type: string
+              enum:
+                - B
+                - G
+                - R
+                - W
+                - A
+              description: >
+                Possible values:
+                  - `B` - blue
+                  - `G` - green
+                  - `R` - red
+                  - `W` - white
+                  - `A` - abyss
+        name:
+          type: string
+          description: unique name of the item
+        typeLine:
+          type: string
+          description: name of the baseitem (+prefix/suffix if existing)
+        identified:
+          type: boolean
+          description: true if the item is identified
+        corrupted:
+          type: boolean
+          description: true if the item is corrupted
+        properties:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemLineContent"
+        utilityMods:
+          type: array
+          description: \"Implicit\" mods for flasks.
+          items:
+            type: string
+        explicitMods:
+          type: array
+          items:
+            type: string
+        craftedMods:
+          type: array
+          items:
+            type: string
+          description: master crafted mods
+        enchantMods:
+          type: array
+          items:
+            type: string
+          description: enchantments
+        flavourText:
+          type: array
+          items:
+            type: string
+          description: Array of lines of the flavour text of e.g. unique items.
+        descrText:
+          type: string
+          description: description
+        secDescrText:
+          type: string
+          description: secondary description
+        frameType:
+          type: number
+          enum:
+            - 0
+            - 1
+            - 2
+            - 3
+            - 4
+          description: > 
+            Frame "color" of the item depending on rarity, item type (e.g. gem) etc.
+
+            Possible values with examples:
+              * `0` - normal items
+              * `1` - magic items
+              * `2` - rare items
+              * `3` - unique items
+              * `4` - gems
+        category:
+          description: > 
+            Should only contain one property which is the "superclass" and an array
+            where the only member is the "subclass"
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        x:
+          type: number
+          description: "X coordinate in the specified frame."
+        y:
+          type: number
+          description: "Y coordinate in the specified frame."
+        inventoryId:
+          type: string
+          description: >
+            Id of the slot where this item is located. `StashX` for stash number `X`.
+            `BodyArmour`, `Flask` etc for actual inventory slots.
+        isRelic:
+          type: boolean
+          description: true if the item is a relic item (introduced in Legacy league).
+        socketetedItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+          description: >
+            List of items that are socketed into the sockets of the item. The 
+            schema has an additional property __socket__ which contains the 
+            socket index.
+        socket:
+          type: number
+          description: Socket index in the parent item in which this item is socketed.
+        colour:
+          type: string
+          description: >
+            gem colour (originates from attribute requirement):
+              * `D` - green
+              * `I` - blue
+              * `S` - red 
+              * `G` - white
+          enum:
+            - D
+            - I
+            - S
+            - G
+    ItemLineContent:
+      type: object
+      properties:
+        name:
+          type: string
+        values:
+          type: array
+          description: >
+            Tuple where the first value is the display string.
+            The second value describes how the value should be displayed:
+              * 0 - white (simple) text
+              * 1 - blue (augmented) text
+              * 4 - red (fire damage) text
+              * 5 - blue (cold damage) text
+              * 6 - yellow (lightning damage) text
+              * 7 - red-violet (chaos damage) text
+          items:
+            type: array
+            minItems: 2
+            maxItems: 2
+            items:
+              anyOf:
+                - type: string
+                - type: number
+        displayMode:
+          type: number
+          description: >
+            Possible values:
+              * 0 - `name` should be displayed as \`${name}: ${values.join(', ')}\` if 
+                  values.length > 0 otherwise just '${name}'
+              * 1 - `name` should be displayed as \`${values[0]} ${name}\`
+              * 2 - `name__ should be display as \`${progressBar(values[0])} ${values[0]}\`
+                    i.e. `name` is not displayed
+              * 3 - `name` field contains placeholders for the values in
+                      the format of `%\d`. The number nth value in `values` (0-based)
+          enum:
+            - 0
+            - 1
+            - 2
+            - 3
+        type:
+          type: number
+          description: The order in which the lines should be displayed
 paths:
   /character-window/get-characters:
     get:
@@ -65,6 +284,12 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Item"
   /character-window/get-passive-skills:
     get:
       summary: Get Passive Skills
