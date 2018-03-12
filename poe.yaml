@@ -1,0 +1,369 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+# Added by API Auto Mocking Plugin
+  - description: PathofExile Official Site
+    url: https://www.pathofexile.com
+  - description: Garena Taiwan Site
+    url: https://web.poe.garena.tw
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Chuanhsing/poe/1.0.0
+info:
+  description: |
+    This is a sample PathofExile API
+  version: "1.0.0"
+  title: PathofExile API
+  contact:
+    url: 'https://www.reddit.com/user/chuanhsing'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: SESSIONID  # cookie name
+  schemas:
+    Leagues:
+      type: string
+      enum:
+        - Standard
+        - Hardcore
+        - Abyss
+        - Hardcore Abyss
+paths:
+  /character-window/get-characters:
+    get:
+      summary: Get Characters
+      parameters:
+        - name: accountName
+          in: query
+          description: 'ex: _Wrex'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /character-window/get-items:
+    get:
+      summary: Get Items
+      parameters:
+        - name: accountName
+          in: query
+          description: 'ex: _Wrex'
+          required: true
+          schema:
+            type: string
+        - name: character
+          in: query
+          description: 'ex: Morrigan'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /character-window/get-passive-skills:
+    get:
+      summary: Get Passive Skills
+      parameters:
+        - name: accountName
+          in: query
+          description: 'ex: _Wrex'
+          required: true
+          schema:
+            type: string
+        - name: character
+          in: query
+          description: 'ex: Morrigan'
+          required: true
+          schema:
+            type: string
+        - name: reqData
+          in: query
+          required: true
+          schema:
+            type: number
+            enum: [0, 1]
+      responses:
+        '200':
+          description: OK
+  /character-window/get-stash-items:
+    get:
+      security:
+        - cookieAuth: []
+      summary: Get Items
+      parameters:
+        - name: league
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Leagues'
+        - name: accountName
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: tabs
+          in: query
+          description: '{0,1} 1 to shows tabs name, position, colors'
+          required: true
+          schema:
+            type: number
+            enum: [0, 1]
+        - name: tabindex
+          in: query
+          description: '{0,...,N}'
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
+  /character-window/get-mtx-stash-items:
+    get:
+      security:
+        - cookieAuth: []
+      summary: Get MTXs
+      parameters:
+        - name: league
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Leagues'
+        - name: tabs
+          in: query
+          description: '{0,1} 1 to shows tabs name, position, colors'
+          required: true
+          schema:
+            type: number
+            enum: [0, 1]
+        - name: sortOrder
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [category, theme]
+      responses:
+        '200':
+          description: OK
+  /api/seasons:
+    get:
+      summary: Get Seasons
+      responses:
+        '200':
+          description: OK
+  /api/leagues:
+    get:
+      summary: Get a list of current and past leagues.
+      parameters:
+        - name: type
+          in: query
+          description: >
+            Possible values:
+              * `all` - retrieves all leagues (the default)
+              * `main` - retrieves main leagues (ones from the character screen)
+              * `event` - retrieves event leagues
+              * `season` - retrieves leagues in a particular season
+          schema:
+            type: string
+            enum: [all, main, event, season]
+        - name: season
+          in: query
+          description: |
+            A particular season id. Required when type=season.
+          schema:
+            type: string
+        - name: compat
+          in: query
+          description: |
+            Possible values:
+              * `0` - Displays the full info for leagues retrieved (will only retrieve a maximum of 50 leagues) (the default)
+              * `1` - Display compact info for leagues retrieved (will retrieve up to 230 leagues)
+          schema:
+            type: number
+            enum: [0, 1]
+        - name: limit
+          in: query
+          description: |
+            This specifies the number of league entries to include. By default this is the maximum, which depends on the setting above.
+          schema:
+            type: number
+        - name: offset
+          in: query
+          description: |
+            This specifies the offset to the first league entry to include. Default: 0.
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
+  /api/leagues/{id}:
+    get:
+      summary: Get a single league by id.
+      parameters:
+        - name: id
+          in: path
+          description: |
+            The id (name) of the league.
+          required: true
+          schema:
+            $ref: '#/components/schemas/Leagues'
+        - name: ladder
+          in: query
+          description: |
+            Set to 1 to include the ladder in the response. The ladder will be in included in the "ladder" key. Defaults to 0, excluding the ladder. Please note that the ladder can be retrieved using the ladder resource, and that retrieving it using the league API is just an optimization that can be used if you are requesting the league anyway.
+          schema:
+            type: string
+        - name: ladderLimit
+          in: query
+          description: |
+            When including the ladder with ladder=1, this specifies the number of ladder entries to include. Default: 20, Max: 200.
+          schema:
+            type: number
+        - name: ladderOffset
+          in: query
+          description: |
+            When including the ladder with ladder=1, this specifies the offset to the first ladder entry to include. Default: 0.
+          schema:
+            type: number
+        - name: ladderTrack
+          in: query
+          description: |
+            When including the ladder with ladder=1, this setting adds unique IDs for each character returned. These can be used when name conflicts occur.
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
+  /api/league-rules:
+    get:
+      summary: Get a list of all possible league rules.
+      responses:
+        '200':
+          description: OK
+  /api/league-rules/{id}:
+    get:
+      summary: Get a single league rule by id.
+      parameters:
+        - name: id
+          in: path
+          description: The rule id.
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
+  /api/ladders/{id}:
+    get:
+      summary: Get a ladder by league id. There is a restriction in place on the last ladder entry you are able to retrieve which is set to 15000.
+      parameters:
+        - name: id
+          in: path
+          description: |
+            The id (name) of the league for the ladder you want to retrieve.
+          required: true
+          schema:
+            $ref: '#/components/schemas/Leagues'
+        - name: limit
+          in: query
+          description: |
+            Specifies the number of ladder entries to include. Default: 20, Max: 200.
+          schema:
+            type: number
+        - name: offset
+          in: query
+          description: |
+            Specifies the offset to the first ladder entry to include. Default: 0.
+          schema:
+            type: number
+        - name: type
+          in: query
+          description: |
+            Specifies the type of ladder, options: [league (default), pvp, labyrinth]
+          schema:
+            type: string
+            enum: [league, pvp, labyrinth]
+        - name: track
+          in: query
+          description: |
+            Adds unique IDs for each character returned. These can be used when name conflicts occur. Default: true
+          schema:
+            type: string
+        - name: accountName
+          in: query
+          description: |
+            League only: Filters by account name within the first 15000 results.
+          schema:
+            type: number
+        - name: difficulty
+          in: query
+          description: |
+            Labyrinth only: Standard (1), Cruel (2) or Merciless (3)
+          schema:
+            type: string
+            enum: [Normal]
+        - name: start
+          in: query
+          description: |
+            Labyrinth only: Timestamp of the ladder you want.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/pvp-matches:
+    get:
+      summary: Get a list of PvP matches.
+      parameters:
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [season]
+        - name: seasonId
+          in: query
+          description: |
+            Set this to get PvP matches for a particular season. Leave this unset to retrieve all upcoming PvP matches.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/public-stash-tabs:
+    get:
+      summary: Retrieves a list of stashes, accounts, and items as described above in the Introduction section.
+      parameters:
+        - name: id
+          in: query
+          description: |
+            The next change ID you recieved from previously fetching changes. Default: 0
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/trade/data/leagues:
+    get:
+      responses:
+        '200':
+          description: OK
+  /api/trade/data/items:
+    get:
+      responses:
+        '200':
+          description: OK
+  /api/trade/data/stats:
+    get:
+      responses:
+        '200':
+          description: OK
+  /api/trade/data/static:
+    get:
+      responses:
+        '200':
+          description: OK
