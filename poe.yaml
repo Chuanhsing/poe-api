@@ -254,7 +254,11 @@ components:
 paths:
   /character-window/get-characters:
     get:
+      security:
+        - cookieAuth: []
       summary: Get Characters
+      description: >
+        Priavte mode account need session to get information
       parameters:
         - name: accountName
           in: query
@@ -267,7 +271,11 @@ paths:
           description: OK
   /character-window/get-items:
     get:
+      security:
+        - cookieAuth: []
       summary: Get Items
+      description: >
+        Priavte mode account need session to get information
       parameters:
         - name: accountName
           in: query
@@ -292,7 +300,11 @@ paths:
                   $ref: "#/components/schemas/Item"
   /character-window/get-passive-skills:
     get:
+      security:
+        - cookieAuth: []
       summary: Get Passive Skills
+      description: >
+        Priavte mode account need session to get information
       parameters:
         - name: accountName
           in: query
@@ -383,6 +395,8 @@ paths:
   /api/leagues:
     get:
       summary: Get a list of current and past leagues.
+      description: |
+        * https://www.pathofexile.com/developer/docs/api-resource-leagues
       parameters:
         - name: type
           in: query
@@ -485,6 +499,8 @@ paths:
   /api/ladders/{id}:
     get:
       summary: Get a ladder by league id. There is a restriction in place on the last ladder entry you are able to retrieve which is set to 15000.
+      description: >
+        * https://www.pathofexile.com/developer/docs/api-resource-ladders
       parameters:
         - name: id
           in: path
@@ -562,6 +578,9 @@ paths:
   /api/public-stash-tabs:
     get:
       summary: Retrieves a list of stashes, accounts, and items as described above in the Introduction section.
+      description: |
+        * https://www.pathofexile.com/developer/docs/api-resource-public-stash-tabs
+        * https://pathofexile.gamepedia.com/Public_stash_tab_API
       parameters:
         - name: id
           in: query
