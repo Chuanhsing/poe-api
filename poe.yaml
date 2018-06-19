@@ -611,3 +611,18 @@ paths:
       responses:
         '200':
           description: OK
+  /api/shop/microtransactions/specials:
+    get:
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [active]
+        - name: limit
+          in: query
+          schema:
+            type: number
