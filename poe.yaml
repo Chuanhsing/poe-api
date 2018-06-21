@@ -436,6 +436,12 @@ paths:
             This specifies the offset to the first league entry to include. Default: 0.
           schema:
             type: number
+        - name: callback
+          in: query
+          description: |
+            jsonp callback
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -474,18 +480,35 @@ paths:
             When including the ladder with ladder=1, this setting adds unique IDs for each character returned. These can be used when name conflicts occur.
           schema:
             type: number
+        - name: callback
+          in: query
+          description: |
+            jsonp callback
+          schema:
+            type: string
       responses:
         '200':
           description: OK
   /api/league-rules:
     get:
       summary: Get a list of all possible league rules.
+      description: |
+        https://www.pathofexile.com/developer/docs/api-resource-league-rules
+      parameters:
+        - name: callback
+          in: query
+          description: |
+            jsonp callback
+          schema:
+            type: string
       responses:
         '200':
           description: OK
   /api/league-rules/{id}:
     get:
       summary: Get a single league rule by id.
+      description: |
+        https://www.pathofexile.com/developer/docs/api-resource-league-rules
       parameters:
         - name: id
           in: path
@@ -493,6 +516,12 @@ paths:
           required: true
           schema:
             type: number
+        - name: callback
+          in: query
+          description: |
+            jsonp callback
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -553,6 +582,12 @@ paths:
             Labyrinth only: Timestamp of the ladder you want.
           schema:
             type: string
+        - name: callback
+          in: query
+          description: |
+            jsonp callback
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -570,6 +605,12 @@ paths:
           in: query
           description: |
             Set this to get PvP matches for a particular season. Leave this unset to retrieve all upcoming PvP matches.
+          schema:
+            type: string
+        - name: callback
+          in: query
+          description: |
+            jsonp callback
           schema:
             type: string
       responses:
