@@ -259,6 +259,25 @@ components:
           properties:
             filters:
               type: object
+              properties:
+                trade_filters:
+                  type: object
+                  properties:
+                    disabled:
+                      type: boolean
+                      enum: [false, true]
+                    filters:
+                      type: object
+                      properties:
+                        price:
+                          type: object
+                          properties:
+                            min:
+                              type: integer
+                              example: 1
+                            max:
+                              type: integer
+                              example: 30
             status:
               type: object
               properties:
@@ -271,7 +290,10 @@ components:
                 $ref: "#/components/schemas/SearchSourceStats"
             name:
               type: string
-              example: Berek's Grip
+              example: Tabula Rasa
+            type:
+              type: string
+              example: Simple Robe
         sort:
           type: object
           properties:
@@ -704,24 +726,18 @@ paths:
         '200':
           description: OK
   /api/trade/search/{league}:
-    get:
+    post:
       parameters:
         - name: league
           in: path
           required: true
           schema:
             $ref: '#/components/schemas/Leagues'
-        - name: redirect
-          in: query
-          schema:
-            type: string
-            nullable: true
-            enum: [1]
-          description: nullable
-        - name: source
-          in: query
-          schema:
-            $ref: '#/components/schemas/SearchSource'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchSource'
       responses:
         '200':
           description: OK
