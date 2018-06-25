@@ -309,6 +309,19 @@ components:
         filters:
           type: array
           example: []
+    SearchResult:
+      type: object
+      properties:
+        id:
+          type: string
+          example: Wqn2LKFm
+        result:
+          type: array
+          items:
+            type: string
+        total:
+          type: integer
+          example: 1
 paths:
   /character-window/get-characters:
     get:
@@ -738,6 +751,27 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SearchSource'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+  /api/trade/fetch/{items}:
+    get:
+      parameters:
+        - name: items
+          in: path
+          required: true
+          description: Search Results in ,
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: Search id
+          schema:
+            type: string
       responses:
         '200':
           description: OK
