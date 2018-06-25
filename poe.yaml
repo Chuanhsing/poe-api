@@ -30,8 +30,8 @@ components:
       enum:
         - Standard
         - Hardcore
-        - Abyss
-        - Hardcore Abyss
+        - Incursion
+        - Hardcore Incursion
     Item:
       type: object
       properties:
@@ -251,6 +251,42 @@ components:
         type:
           type: number
           description: The order in which the lines should be displayed
+    SearchSource:
+      type: object
+      properties:
+        query:
+          type: object
+          properties:
+            filters:
+              type: object
+            status:
+              type: object
+              properties:
+                option:
+                  type: string
+                  enum: [online]
+            stats:
+              type: array
+              items:
+                $ref: "#/components/schemas/SearchSourceStats"
+            name:
+              type: string
+              example: Berek's Grip
+        sort:
+          type: object
+          properties:
+            price:
+              type: string
+              example: asc
+    SearchSourceStats:
+      type: object
+      properties:
+        type:
+          type: string
+          example: and
+        filters:
+          type: array
+          example: []
 paths:
   /character-window/get-characters:
     get:
@@ -654,9 +690,6 @@ paths:
           description: OK
   /api/shop/microtransactions/specials:
     get:
-      responses:
-        '200':
-          description: OK
       parameters:
         - name: type
           in: query
@@ -667,3 +700,28 @@ paths:
           in: query
           schema:
             type: number
+      responses:
+        '200':
+          description: OK
+  /api/trade/search/{league}:
+    get:
+      parameters:
+        - name: league
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Leagues'
+        - name: redirect
+          in: query
+          schema:
+            type: string
+            nullable: true
+            enum: [1]
+          description: nullable
+        - name: source
+          in: query
+          schema:
+            $ref: '#/components/schemas/SearchSource'
+      responses:
+        '200':
+          description: OK
