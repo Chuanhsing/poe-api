@@ -319,6 +319,7 @@ components:
           type: array
           items:
             type: string
+          example: [c593ccc98580e892eb0745048a8378927b452070e91da03139a00d450eca7477,e1105792ac87113b20487d7cb2d5b9fd43f40b3bdd8a55780acbaaad513c9b65]
         total:
           type: integer
           example: 1
@@ -767,11 +768,13 @@ paths:
           description: Search Results in ,
           schema:
             type: string
+          example: c593ccc98580e892eb0745048a8378927b452070e91da03139a00d450eca7477,e1105792ac87113b20487d7cb2d5b9fd43f40b3bdd8a55780acbaaad513c9b65
         - name: query
           in: query
           description: Search id
           schema:
             type: string
+          example: Wqn2LKFm
       responses:
         '200':
           description: OK
