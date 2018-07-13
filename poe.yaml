@@ -314,6 +314,8 @@ components:
           example: and
         filters:
           type: array
+          items:
+            type: string
           example: []
     SearchResult:
       type: object
@@ -461,6 +463,21 @@ paths:
           schema:
             type: string
             enum: [category, theme]
+      responses:
+        '200':
+          description: OK
+  /character-window/get-account-name-by-character:
+    get:
+      security:
+        - cookieAuth: []
+      summary: Get Account Name
+      parameters:
+        - name: character
+          in: query
+          required: true
+          schema:
+            type: string
+          example: QuillHitman
       responses:
         '200':
           description: OK
