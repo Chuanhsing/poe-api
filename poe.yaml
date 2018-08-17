@@ -4,6 +4,8 @@ servers:
 # Added by API Auto Mocking Plugin
   - description: PathofExile Official Site
     url: https://www.pathofexile.com
+  - description: PathofExile Official Site Russian
+    url: https://ru.pathofexile.com
   - description: Garena Taiwan Site
     url: https://web.poe.garena.tw
   - description: SwaggerHub API Auto Mocking
@@ -727,6 +729,28 @@ paths:
       responses:
         '200':
           description: OK
+  /api/ggg-inner-stash-tabs:
+    get:
+      summary: GGG use the same river, but get the items before they're turned into json (public-stash-tabs) so have the full data set to use. All the data stored in the backend is language agnostic.
+      responses:
+        '403':
+          description: Forbidden
+  /api/shop/microtransactions/specials:
+    get:
+      summary: get today special deals
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [active]
+        - name: limit
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
   /api/trade/data/leagues:
     get:
       responses:
@@ -747,23 +771,9 @@ paths:
       responses:
         '200':
           description: OK
-  /api/shop/microtransactions/specials:
-    get:
-      parameters:
-        - name: type
-          in: query
-          schema:
-            type: string
-            enum: [active]
-        - name: limit
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          description: OK
   /api/trade/search/{league}:
     post:
+      summary: trade search function
       parameters:
         - name: league
           in: path
@@ -784,6 +794,7 @@ paths:
                 $ref: '#/components/schemas/SearchResult'
   /api/trade/fetch/{items}:
     get:
+      summary: fetch items using search result
       parameters:
         - name: items
           in: path
@@ -798,6 +809,35 @@ paths:
           schema:
             type: string
           example: Wqn2LKFm
+      responses:
+        '200':
+          description: OK
+  /api/trade/ignore:
+    get:
+      summary: List ignored trade accounts
+      responses:
+        '200':
+          description: OK
+  /api/trade/ignore/{account}:
+    put:
+      summary: Ignore a trade account
+      parameters:
+        - name: account
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: Unignore a trade account
+      parameters:
+        - name: account
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: OK
