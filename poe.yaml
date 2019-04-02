@@ -8,6 +8,8 @@ servers:
     url: https://ru.pathofexile.com
   - description: Garena Taiwan Site
     url: https://web.poe.garena.tw
+  - description: Tencent China Site
+    url: https://poe.game.qq.com
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/Chuanhsing/poe/1.0.0
 info:
@@ -25,7 +27,7 @@ components:
     cookieAuth:
       type: apiKey
       in: cookie
-      name: SESSIONID  # cookie name
+      name: POESESSID  # cookie name
   schemas:
     Leagues:
       type: string
@@ -815,12 +817,16 @@ paths:
   /api/trade/ignore:
     get:
       summary: List ignored trade accounts
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: OK
   /api/trade/ignore/{account}:
     put:
       summary: Ignore a trade account
+      security:
+        - cookieAuth: []
       parameters:
         - name: account
           in: path
@@ -832,8 +838,24 @@ paths:
           description: OK
     delete:
       summary: Unignore a trade account
+      security:
+        - cookieAuth: []
       parameters:
         - name: account
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/guild/{guildid}/stash/history:
+    get:
+      summary: List guild stash history
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: guildid
           in: path
           required: true
           schema:
