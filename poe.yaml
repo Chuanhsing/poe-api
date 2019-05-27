@@ -34,8 +34,14 @@ components:
       enum:
         - Standard
         - Hardcore
+        - SSF Standard
+        - SSF Hardcore
         - Incursion
         - Hardcore Incursion
+        - Synthesis
+        - Hardcore Synthesis
+        - SSF Synthesis
+        - SSF Synthesis HC
     Item:
       type: object
       properties:
@@ -66,6 +72,9 @@ components:
         shaper:
           type: boolean
           description: true if the item can have shaper mods (shaper background).
+        fractured:
+          type: boolean
+          description: true if the item can have fractured mods (fractured background).
         sockets:
           type: object
           properties:
@@ -137,6 +146,11 @@ components:
           items:
             type: string
           description: enchantments
+        fracturedMods:
+          type: array
+          items:
+            type: string
+          description: fractured mods
         flavourText:
           type: array
           items:
