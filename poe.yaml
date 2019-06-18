@@ -34,14 +34,12 @@ components:
       enum:
         - Standard
         - Hardcore
+        - Legion
+        - Hardcore Legion
         - SSF Standard
         - SSF Hardcore
-        - Incursion
-        - Hardcore Incursion
-        - Synthesis
-        - Hardcore Synthesis
-        - SSF Synthesis
-        - SSF Synthesis HC
+        - SSF Legion
+        - SSF Legion HC
     Item:
       type: object
       properties:
@@ -515,13 +513,19 @@ paths:
           in: query
           description: >
             Possible values:
-              * `all` - retrieves all leagues (the default)
               * `main` - retrieves main leagues (ones from the character screen)
               * `event` - retrieves event leagues
               * `season` - retrieves leagues in a particular season
           schema:
             type: string
-            enum: [all, main, event, season]
+            enum: [main, event, season]
+        - name: realm
+          in: query
+          description: |
+            The realm of the leagues: pc (default), xbox, or sony
+          schema:
+            type: string
+            enum: [pc, xbox, sony]
         - name: season
           in: query
           description: |
@@ -569,30 +573,55 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/Leagues'
-        - name: ladder
+        - name: realm
           in: query
           description: |
-            Set to 1 to include the ladder in the response. The ladder will be in included in the "ladder" key. Defaults to 0, excluding the ladder. Please note that the ladder can be retrieved using the ladder resource, and that retrieving it using the league API is just an optimization that can be used if you are requesting the league anyway.
+            The realm of the leagues: pc (default), xbox, or sony
           schema:
             type: string
-        - name: ladderLimit
+            enum: [pc, xbox, sony]
+        - name: limit
           in: query
           description: |
             When including the ladder with ladder=1, this specifies the number of ladder entries to include. Default: 20, Max: 200.
           schema:
             type: number
-        - name: ladderOffset
+        - name: offset
           in: query
           description: |
             When including the ladder with ladder=1, this specifies the offset to the first ladder entry to include. Default: 0.
           schema:
             type: number
-        - name: ladderTrack
+        - name: track
           in: query
           description: |
             When including the ladder with ladder=1, this setting adds unique IDs for each character returned. These can be used when name conflicts occur.
           schema:
             type: number
+        - name: accountName
+          in: query
+          description: |
+            League only: Filters by account name within the first 15000 results.
+          schema:
+            type: string
+        - name: difficulty
+          in: query
+          description: |
+            Labyrinth only: Standard (1), Cruel (2), or Merciless (3)
+          schema:
+            type: string
+            enum: [Standard, Cruel, Merciless]
+        - name: start
+          in: query
+          description: |
+            Labyrinth only: Timestamp of the ladder you want.
+          schema:
+            type: string
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [depth, depthsolo]
         - name: callback
           in: query
           description: |
@@ -720,6 +749,13 @@ paths:
             Set this to get PvP matches for a particular season. Leave this unset to retrieve all upcoming PvP matches.
           schema:
             type: string
+        - name: realm
+          in: query
+          description: |
+            The realm to fetch PvP matches from: pc (default), xbox, or sony
+          schema:
+            type: string
+            enum: [pc, xbox, sony]
         - name: callback
           in: query
           description: |
@@ -874,6 +910,42 @@ paths:
           required: true
           schema:
             type: string
+        - name: from
+          in: query
+          required: false
+          description: unix timestamp
+          schema:
+            type: string
+        - name: fromid
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /ladder/export-csv/league/{league}/realm/{realm}/index/{pageid}:
+    get:
+      parameters:
+        - name: league
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Leagues'
+        - name: realm
+          in: path
+          required: true
+          description: |
+            The realm to fetch PvP matches from: pc (default), xbox, or sony
+          schema:
+            type: string
+            enum: [pc, xbox, sony]
+        - name: pageid
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [1, 2, 3, 4, 6, 7, 8]
       responses:
         '200':
           description: OK
