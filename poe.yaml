@@ -14,7 +14,9 @@ servers:
     url: https://virtserver.swaggerhub.com/Chuanhsing/poe/1.0.0
 info:
   description: |
-    This is a sample PathofExile API
+    This is a sample PathofExile API.
+    You can get new API updates from https://www.pathofexile.com/forum/view-forum/674 and
+    https://www.pathofexile.com/developer/docs/api
   version: "1.0.0"
   title: PathofExile API
   contact:
@@ -29,17 +31,26 @@ components:
       in: cookie
       name: POESESSID  # cookie name
   schemas:
+    Realms:
+      description: |
+        The realm of the leagues: pc (default), xbox, or sony
+      type: string
+      enum:
+        - pc
+        - xbox
+        - sony
+      default: pc
     Leagues:
       type: string
       enum:
         - Standard
         - Hardcore
-        - Legion
-        - Hardcore Legion
+        - Blight
+        - Hardcore Blight
         - SSF Standard
         - SSF Hardcore
-        - SSF Legion
-        - SSF Legion HC
+        - SSF Blight
+        - SSF Blight HC
     Item:
       type: object
       properties:
@@ -434,6 +445,11 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/Leagues'
+        - name: realm
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Realms'
         - name: accountName
           in: query
           required: true
@@ -446,7 +462,7 @@ paths:
           schema:
             type: number
             enum: [0, 1]
-        - name: tabindex
+        - name: tabIndex
           in: query
           description: '{0,...,N}'
           required: true
@@ -524,8 +540,7 @@ paths:
           description: |
             The realm of the leagues: pc (default), xbox, or sony
           schema:
-            type: string
-            enum: [pc, xbox, sony]
+            $ref: '#/components/schemas/Realms'
         - name: season
           in: query
           description: |
@@ -578,8 +593,7 @@ paths:
           description: |
             The realm of the leagues: pc (default), xbox, or sony
           schema:
-            type: string
-            enum: [pc, xbox, sony]
+            $ref: '#/components/schemas/Realms'
         - name: limit
           in: query
           description: |
@@ -754,8 +768,7 @@ paths:
           description: |
             The realm to fetch PvP matches from: pc (default), xbox, or sony
           schema:
-            type: string
-            enum: [pc, xbox, sony]
+            $ref: '#/components/schemas/Realms'
         - name: callback
           in: query
           description: |
@@ -781,12 +794,6 @@ paths:
       responses:
         '200':
           description: OK
-  /api/ggg-inner-stash-tabs:
-    get:
-      summary: GGG use the same river, but get the items before they're turned into json (public-stash-tabs) so have the full data set to use. All the data stored in the backend is language agnostic.
-      responses:
-        '403':
-          description: Forbidden
   /api/shop/microtransactions/specials:
     get:
       summary: get today special deals
@@ -938,8 +945,7 @@ paths:
           description: |
             The realm to fetch PvP matches from: pc (default), xbox, or sony
           schema:
-            type: string
-            enum: [pc, xbox, sony]
+            $ref: '#/components/schemas/Realms'
         - name: pageid
           in: path
           required: true
