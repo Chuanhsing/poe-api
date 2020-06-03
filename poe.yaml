@@ -45,12 +45,12 @@ components:
       enum:
         - Standard
         - Hardcore
-        - Blight
-        - Hardcore Blight
+        - Delirium
+        - Hardcore Delirium
         - SSF Standard
         - SSF Hardcore
-        - SSF Blight
-        - SSF Blight HC
+        - SSF Delirium
+        - SSF Delirium HC
     Item:
       type: object
       properties:
@@ -931,7 +931,7 @@ paths:
       responses:
         '200':
           description: OK
-  /ladder/export-csv/league/{league}/realm/{realm}/index/{pageid}:
+  /ladder/export-csv/league/{league}:
     get:
       parameters:
         - name: league
@@ -940,14 +940,12 @@ paths:
           schema:
             $ref: '#/components/schemas/Leagues'
         - name: realm
-          in: path
           required: true
           description: |
             The realm to fetch PvP matches from: pc (default), xbox, or sony
           schema:
             $ref: '#/components/schemas/Realms'
-        - name: pageid
-          in: path
+        - name: index
           required: true
           schema:
             type: string
