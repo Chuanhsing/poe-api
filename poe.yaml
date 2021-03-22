@@ -31,6 +31,9 @@ components:
       in: cookie
       name: POESESSID  # cookie name
   schemas:
+    UserAgent:
+      type: string
+      default: poe-api (#https://poedb.tw)
     Realms:
       description: |
         The realm of the leagues: pc (default), xbox, or sony
@@ -367,6 +370,11 @@ paths:
       description: >
         Priavte mode account need session to get information
       parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
         - name: accountName
           in: query
           description: 'ex: _Wrex'
@@ -384,6 +392,11 @@ paths:
       description: >
         Priavte mode account need session to get information
       parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
         - name: accountName
           in: query
           description: 'ex: _Wrex'
@@ -413,6 +426,11 @@ paths:
       description: >
         Priavte mode account need session to get information
       parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
         - name: accountName
           in: query
           description: 'ex: _Wrex'
@@ -440,6 +458,11 @@ paths:
         - cookieAuth: []
       summary: Get Items
       parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
         - name: league
           in: query
           required: true
@@ -477,6 +500,11 @@ paths:
         - cookieAuth: []
       summary: Get MTXs
       parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
         - name: league
           in: query
           required: true
@@ -504,6 +532,11 @@ paths:
         - cookieAuth: []
       summary: Get Account Name
       parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
         - name: character
           in: query
           required: true
@@ -785,6 +818,11 @@ paths:
         * https://www.pathofexile.com/developer/docs/api-resource-public-stash-tabs
         * https://pathofexile.gamepedia.com/Public_stash_tab_API
       parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
         - name: id
           in: query
           description: |
@@ -950,8 +988,8 @@ paths:
           in: query
           required: true
           schema:
-            type: string
-            enum: [1, 2, 3, 4, 6, 7, 8]
+            type: integer
+            enum: [1, 2, 3, 4, 5, 6, 7, 8]
       responses:
         '200':
           description: OK
