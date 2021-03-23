@@ -33,10 +33,12 @@ components:
   schemas:
     UserAgent:
       type: string
-      default: poe-api (#https://poedb.tw)
+      description: |
+        requested by ggg https://www.pathofexile.com/forum/view-thread/3019033/page/1#p23790007
+      default: https://poedb.tw, contact@me.com
     Realms:
       description: |
-        The realm of the leagues: pc (default), xbox, or sony
+        The realm of the leagues
       type: string
       enum:
         - pc
@@ -60,7 +62,7 @@ components:
         id:
           type: string
         realm:
-          type: string
+          $ref: '#/components/schemas/Realms'
         description:
           type: string
         url:
@@ -181,7 +183,7 @@ components:
             name:
               type: string
             realm:
-              type: string
+              $ref: '#/components/schemas/Realms'
             challenges:
               type: object
               properties:
@@ -474,7 +476,7 @@ components:
         name:
           type: string
         realm:
-          type: string
+          $ref: '#/components/schemas/Realms'
         guild:
           type: object
           properties:
@@ -620,10 +622,10 @@ paths:
             $ref: '#/components/schemas/UserAgent'
         - name: accountName
           in: query
-          description: 'ex: _Wrex'
           required: true
           schema:
             type: string
+            example: _Wrex
       responses:
         '200':
           description: OK
@@ -648,16 +650,16 @@ paths:
             $ref: '#/components/schemas/UserAgent'
         - name: accountName
           in: query
-          description: 'ex: _Wrex'
           required: true
           schema:
             type: string
+            example: _Wrex
         - name: character
           in: query
-          description: 'ex: Morrigan'
           required: true
           schema:
             type: string
+            example: Morrigan
       responses:
         '200':
           description: OK
@@ -684,16 +686,16 @@ paths:
             $ref: '#/components/schemas/UserAgent'
         - name: accountName
           in: query
-          description: 'ex: _Wrex'
           required: true
           schema:
             type: string
+            example: _Wrex
         - name: character
           in: query
-          description: 'ex: Morrigan'
           required: true
           schema:
             type: string
+            example: Morrigan
         - name: reqData
           in: query
           required: true
@@ -833,12 +835,14 @@ paths:
           schema:
             type: integer
             default: 1
+            minimum: 1
         - name: perPage
           in: query
           required: true
           schema:
             type: integer
             default: 16
+            maximum: 16
         - name: custom
           description: true only custom avatars (supporter avatars) of the account will be fetched
           in: query
@@ -846,7 +850,6 @@ paths:
           schema:
             type: boolean
             default: false
-            enum: [true, false]
       responses:
         '200':
           description: OK
@@ -1057,7 +1060,7 @@ paths:
                             name:
                               type: string
                             realm:
-                              type: string
+                              $ref: '#/components/schemas/Realms'
                             guild:
                               $ref: '#/components/schemas/Guild'
   /api/seasons:
@@ -1138,7 +1141,7 @@ paths:
         - name: realm
           in: query
           description: |
-            The realm of the leagues: pc (default), xbox, or sony
+            The realm of the leagues
           schema:
             $ref: '#/components/schemas/Realms'
         - name: season
@@ -1165,9 +1168,10 @@ paths:
         - name: offset
           in: query
           description: |
-            This specifies the offset to the first league entry to include. Default: 0.
+            This specifies the offset to the first league entry to include.
           schema:
             type: number
+            default: 0
         - name: callback
           in: query
           description: |
@@ -1199,21 +1203,24 @@ paths:
         - name: realm
           in: query
           description: |
-            The realm of the leagues: pc (default), xbox, or sony
+            The realm of the leagues
           schema:
             $ref: '#/components/schemas/Realms'
         - name: limit
           in: query
           description: |
-            When including the ladder with ladder=1, this specifies the number of ladder entries to include. Default: 20, Max: 200.
+            When including the ladder with ladder=1, this specifies the number of ladder entries to include.
           schema:
             type: number
+            default: 20
+            maximum: 200
         - name: offset
           in: query
           description: |
-            When including the ladder with ladder=1, this specifies the offset to the first ladder entry to include. Default: 0.
+            When including the ladder with ladder=1, this specifies the offset to the first ladder entry to include.
           schema:
             type: number
+            default: 0
         - name: track
           in: query
           description: |
@@ -1339,21 +1346,26 @@ paths:
         - name: limit
           in: query
           description: |
-            Specifies the number of ladder entries to include. Default: 20, Max: 200.
+            Specifies the number of ladder entries to include.
           schema:
             type: number
+            default: 20
+            maximum: 200
         - name: offset
           in: query
           description: |
-            Specifies the offset to the first ladder entry to include. Default: 0.
+            Specifies the offset to the first ladder entry to include.
           schema:
             type: number
+            default: 0
+            maximum: 15000
         - name: type
           in: query
           description: |
-            Specifies the type of ladder, options: [league (default), pvp, labyrinth]
+            Specifies the type of ladder
           schema:
             type: string
+            default: league
             enum: [league, pvp, labyrinth]
         - name: track
           in: query
@@ -1414,7 +1426,7 @@ paths:
         - name: realm
           in: query
           description: |
-            The realm to fetch PvP matches from: pc (default), xbox, or sony
+            The realm to fetch PvP matches from
           schema:
             $ref: '#/components/schemas/Realms'
         - name: callback
@@ -1443,9 +1455,10 @@ paths:
         - name: id
           in: query
           description: |
-            The next change ID you recieved from previously fetching changes. Default: 0
+            The next change ID you recieved from previously fetching changes.
           schema:
             type: string
+            default: 0
       responses:
         '200':
           description: OK
@@ -1694,6 +1707,7 @@ paths:
                       page:
                         type: integer
                         default: 1
+                        minimum: 1
                       per_page:
                         type: integer
                         default: 50
@@ -1732,6 +1746,7 @@ paths:
           description: OK
   /ladder/export-csv/league/{league}:
     get:
+      description: 2000 per page
       tags:
         - Ladder
       parameters:
@@ -1744,7 +1759,7 @@ paths:
           in: query
           required: true
           description: |
-            The realm to fetch PvP matches from: pc (default), xbox, or sony
+            The realm to fetch PvP matches from
           schema:
             $ref: '#/components/schemas/Realms'
         - name: index
@@ -1752,7 +1767,10 @@ paths:
           required: true
           schema:
             type: integer
-            enum: [1, 2, 3, 4, 5, 6, 7, 8]
+            minimum: 1
+            maximum: 8
       responses:
         '200':
           description: OK
+          content:
+            text/csv: {}
