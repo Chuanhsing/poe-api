@@ -123,6 +123,32 @@ components:
           type: string
         tag:
           type: string
+    Season:
+      type: object
+      properties:
+        id:
+          type: string
+        startAt:
+          type: string
+        endAt:
+          type: string
+        htmlId:
+          type: string
+        htmlContent:
+          type: string
+        rewards:
+          type: array
+          items:
+            type: object
+            properties:
+              requiredPoints:
+                type: integer
+              item:
+                $ref: "#/components/schemas/Item"
+              itemOffsetX:
+                type: integer
+              itemOffsetY:
+                type: integer
     Ladder:
       type: object
       properties:
@@ -399,6 +425,63 @@ components:
         type:
           type: number
           description: The order in which the lines should be displayed
+    Stream:
+      type: object
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+        status:
+          type: string
+        viewers:
+          type: integer
+        id:
+          type: string
+        url:
+          type: string
+    Microtransaction:
+      type: object
+      properties:
+        id:
+          type: integer
+        startAt:
+          type: string
+        endAt:
+          type: string
+        imageUrl:
+          type: string
+        url:
+          type: string
+        description:
+          type: string
+        specialType:
+          type: string
+        cost:
+          type: integer
+        countdownSpecial:
+          type: boolean
+        countdownImage:
+          type: string
+        priority:
+          type: integer
+        platform:
+          type: string
+        microtransaction:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            description:
+              type: string
+            cost:
+              type: integer
+            guild:
+              type: boolean
+        category:
+          type: boolean
     SearchSource:
       type: object
       properties:
@@ -874,6 +957,12 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Season"
   /api/season-player-history:
     get:
       tags:
@@ -1267,6 +1356,17 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  entries:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Microtransaction'
   /api/streams:
     get:
       tags:
@@ -1274,6 +1374,15 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  streams:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Stream'
   /api/trade/data/leagues:
     get:
       tags:
