@@ -425,6 +425,34 @@ components:
         type:
           type: number
           description: The order in which the lines should be displayed
+    ShowCasePin:
+      type: object
+      properties:
+        character_id:
+          type: string
+        foreign_id:
+          type: string
+        position:
+          type: integer
+        type:
+          type: string
+        label:
+          type: string
+        id:
+          type: string
+        icon:
+          type: string
+    AccountAvatar:
+      type: object
+      properties:
+        custom:
+          type: boolean
+        avatar_id:
+          type: integer
+        image:
+          type: string
+        current:
+          type: boolean
     Stream:
       type: object
       properties:
@@ -440,6 +468,18 @@ components:
           type: string
         url:
           type: string
+    Profile:
+      type: object
+      properties:
+        name:
+          type: string
+        realm:
+          type: string
+        guild:
+          type: object
+          properties:
+            name:
+              type: string
     Microtransaction:
       type: object
       properties:
@@ -792,20 +832,35 @@ paths:
           required: true
           schema:
             type: integer
+            default: 1
         - name: perPage
           in: query
           required: true
           schema:
             type: integer
+            default: 16
         - name: custom
+          description: true only custom avatars (supporter avatars) of the account will be fetched
           in: query
           required: true
           schema:
             type: boolean
+            default: false
             enum: [true, false]
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  collection:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AccountAvatar'
   /api/account/showcase-pins:
     get:
       tags:
@@ -842,6 +897,19 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  account:
+                    type: string
+                  entries:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ShowCasePin'
   /api/profile:
     get:
       tags:
@@ -860,17 +928,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-                  realm:
-                    type: string
-                  guild:
-                    type: object
-                    properties:
-                      name:
-                        type: string
+                $ref: '#/components/schemas/Profile'
   /api/guild:
     get:
       tags:
@@ -906,6 +964,17 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  entries:
+                    type: array
+                    items:
+                      type: object
   /api/guild/point-transactions:
     get:
       tags:
@@ -922,6 +991,17 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  entries:
+                    type: array
+                    items:
+                      type: object
   /api/guild/{guildid}/stash/history:
     get:
       tags:
@@ -949,6 +1029,37 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  entries:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        time:
+                          type: integer
+                        league:
+                          type: string
+                        item:
+                          type: string
+                        action:
+                          type: string
+                        account:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            realm:
+                              type: string
+                            guild:
+                              $ref: '#/components/schemas/Guild'
   /api/seasons:
     get:
       tags:
@@ -1390,6 +1501,20 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        text:
+                          type: string
   /api/trade/data/items:
     get:
       tags:
@@ -1397,6 +1522,34 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        label:
+                          type: string
+                        entries:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              type:
+                                type: string
+                              text:
+                                type: string
+                              flags:
+                                type: object
+                                properties:
+                                  unique:
+                                    type: boolean
   /api/trade/data/stats:
     get:
       tags:
@@ -1404,6 +1557,29 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        label:
+                          type: string
+                        entries:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              text:
+                                type: string
+                              type:
+                                type: string
   /api/trade/data/static:
     get:
       tags:
@@ -1411,6 +1587,31 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        label:
+                          type: string
+                        entries:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              text:
+                                type: string
+                              image:
+                                type: string
   /api/trade/search/{league}:
     post:
       tags:
