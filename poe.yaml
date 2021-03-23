@@ -43,17 +43,135 @@ components:
         - xbox
         - sony
       default: pc
-    Leagues:
+    LeagueNames:
       type: string
       enum:
         - Standard
         - Hardcore
-        - Delirium
-        - Hardcore Delirium
+        - Ritual
+        - Hardcore Ritual
         - SSF Standard
         - SSF Hardcore
-        - SSF Delirium
-        - SSF Delirium HC
+        - SSF Ritual
+        - SSF Ritual HC
+    League:
+      type: object
+      properties:
+        id:
+          type: string
+        realm:
+          type: string
+        description:
+          type: string
+        url:
+          type: string
+        startAt:
+          type: string
+        endAt:
+          type: string
+        delveEvent:
+          type: boolean
+        rules:
+          type: array
+          items:
+            $ref: "#/components/schemas/LeagueRule"
+    LeagueRule:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    Characters:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          league:
+            type: string
+          classId:
+            type: integer
+          ascendancyClass:
+            type: integer
+          class:
+            type: string
+          level:
+            type: integer
+          experience:
+            type: integer
+    StashItems:
+      type: object
+      properties:
+        numTabs:
+          type: integer
+        items:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/Item"
+    Guild:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        tag:
+          type: string
+    Ladder:
+      type: object
+      properties:
+        rank:
+          type: integer
+        dead:
+          type: boolean
+        online:
+          type: boolean
+        character:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            level:
+              type: integer
+            class:
+              type: string
+            time:
+              type: integer
+            score:
+              type: integer
+            experience:
+              type: integer
+        account:
+          type: object
+          properties:
+            name:
+              type: string
+            realm:
+              type: string
+            challenges:
+              type: object
+              properties:
+                total:
+                  type: integer
+    Ladders:
+      type: object
+      properties:
+        total:
+          type: integer
+        entrie:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/Ladder"
     Item:
       type: object
       properties:
@@ -386,6 +504,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Characters'
   /character-window/get-items:
     get:
       tags:
@@ -475,7 +597,7 @@ paths:
           in: query
           required: true
           schema:
-            $ref: '#/components/schemas/Leagues'
+            $ref: '#/components/schemas/LeagueNames'
         - name: realm
           in: query
           required: false
@@ -502,6 +624,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StashItems'
   /character-window/get-mtx-stash-items:
     get:
       tags:
@@ -519,7 +645,7 @@ paths:
           in: query
           required: true
           schema:
-            $ref: '#/components/schemas/Leagues'
+            $ref: '#/components/schemas/LeagueNames'
         - name: tabs
           in: query
           description: '{0,1} 1 to shows tabs name, position, colors'
@@ -558,6 +684,13 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accountName:
+                    type: string
   /api/account-avatar:
     get:
       tags:
@@ -673,14 +806,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  name:
-                    type: string
-                  tag:
-                    type: string
+                $ref: "#/components/schemas/Guild"
   /api/account/guild/point-transactions:
     get:
       tags:
@@ -851,6 +977,12 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/League"
   /api/leagues/{id}:
     get:
       tags:
@@ -863,7 +995,7 @@ paths:
             The id (name) of the league.
           required: true
           schema:
-            $ref: '#/components/schemas/Leagues'
+            $ref: '#/components/schemas/LeagueNames'
         - name: realm
           in: query
           description: |
@@ -921,6 +1053,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/League"
   /api/league-rules:
     get:
       tags:
@@ -938,6 +1074,12 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/League"
   /api/league-rules/{id}:
     get:
       tags:
@@ -961,6 +1103,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeagueRule"
   /api/private-league-member/{id}:
     get:
       tags:
@@ -989,7 +1135,7 @@ paths:
             The id (name) of the league for the ladder you want to retrieve.
           required: true
           schema:
-            $ref: '#/components/schemas/Leagues'
+            $ref: '#/components/schemas/LeagueNames'
         - name: limit
           in: query
           description: |
@@ -1043,6 +1189,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ladders'
   /api/pvp-matches:
     get:
       tags:
@@ -1162,7 +1312,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/Leagues'
+            $ref: '#/components/schemas/LeagueNames'
       requestBody:
         content:
           application/json:
@@ -1247,7 +1397,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/Leagues'
+            $ref: '#/components/schemas/LeagueNames'
         - name: realm
           in: query
           required: true
