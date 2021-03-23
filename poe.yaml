@@ -1657,6 +1657,15 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Item'
   /api/trade/ignore:
     get:
       tags:
@@ -1667,6 +1676,29 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                  pagination:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                        default: 1
+                      per_page:
+                        type: integer
+                        default: 50
+                      total:
+                        type: integer
   /api/trade/ignore/{account}:
     put:
       tags:
