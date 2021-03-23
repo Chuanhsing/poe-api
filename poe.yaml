@@ -364,6 +364,8 @@ components:
 paths:
   /character-window/get-characters:
     get:
+      tags:
+        - Characters
       security:
         - cookieAuth: []
       summary: Get Characters
@@ -386,6 +388,8 @@ paths:
           description: OK
   /character-window/get-items:
     get:
+      tags:
+        - Characters
       security:
         - cookieAuth: []
       summary: Get Items
@@ -420,6 +424,8 @@ paths:
                   $ref: "#/components/schemas/Item"
   /character-window/get-passive-skills:
     get:
+      tags:
+        - Characters
       security:
         - cookieAuth: []
       summary: Get Passive Skills
@@ -454,6 +460,8 @@ paths:
           description: OK
   /character-window/get-stash-items:
     get:
+      tags:
+        - Account
       security:
         - cookieAuth: []
       summary: Get Items
@@ -496,6 +504,8 @@ paths:
           description: OK
   /character-window/get-mtx-stash-items:
     get:
+      tags:
+        - Account
       security:
         - cookieAuth: []
       summary: Get MTXs
@@ -528,6 +538,8 @@ paths:
           description: OK
   /character-window/get-account-name-by-character:
     get:
+      tags:
+        - Account
       security:
         - cookieAuth: []
       summary: Get Account Name
@@ -546,14 +558,243 @@ paths:
       responses:
         '200':
           description: OK
+  /api/account-avatar:
+    get:
+      tags:
+        - Account
+      security:
+        - cookieAuth: []
+      summary: Get Account Acatar
+      parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: custom
+          in: query
+          required: true
+          schema:
+            type: boolean
+            enum: [true, false]
+      responses:
+        '200':
+          description: OK
+  /api/account/showcase-pins:
+    get:
+      tags:
+        - Account
+      security:
+        - cookieAuth: []
+      summary: Get Showcase Pins
+      parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: realm
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Realms'
+        - name: account
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/profile:
+    get:
+      tags:
+        - Account
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  realm:
+                    type: string
+                  guild:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+  /api/guild:
+    get:
+      tags:
+        - Guild
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  tag:
+                    type: string
+  /api/account/guild/point-transactions:
+    get:
+      tags:
+        - Guild
+      summary: Get Account Point Transactions
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
+      responses:
+        '200':
+          description: OK
+  /api/guild/point-transactions:
+    get:
+      tags:
+        - Guild
+      summary: Get Point Transactions
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
+      responses:
+        '200':
+          description: OK
+  /api/guild/{guildid}/stash/history:
+    get:
+      tags:
+        - Guild
+      summary: List guild stash history
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: guildid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: from
+          in: query
+          required: false
+          description: unix timestamp
+          schema:
+            type: string
+        - name: fromid
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
   /api/seasons:
     get:
+      tags:
+        - Seasons
       summary: Get Seasons
+      responses:
+        '200':
+          description: OK
+  /api/season-player-history:
+    get:
+      tags:
+        - Seasons
+      security:
+        - cookieAuth: []
+      summary: Get Season Player History
+      parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: seasonId
+          in: query
+          required: true
+          schema:
+            type: string
+            default: Medallion Race Season
+        - name: realm
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Realms'
+        - name: id
+          description: accountName
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: OK
   /api/leagues:
     get:
+      tags:
+        - Leagues
       summary: Get a list of current and past leagues.
       description: |
         * https://www.pathofexile.com/developer/docs/api-resource-leagues
@@ -612,6 +853,8 @@ paths:
           description: OK
   /api/leagues/{id}:
     get:
+      tags:
+        - Leagues
       summary: Get a single league by id.
       parameters:
         - name: id
@@ -680,6 +923,8 @@ paths:
           description: OK
   /api/league-rules:
     get:
+      tags:
+        - Leagues
       summary: Get a list of all possible league rules.
       description: |
         https://www.pathofexile.com/developer/docs/api-resource-league-rules
@@ -695,6 +940,8 @@ paths:
           description: OK
   /api/league-rules/{id}:
     get:
+      tags:
+        - Leagues
       summary: Get a single league rule by id.
       description: |
         https://www.pathofexile.com/developer/docs/api-resource-league-rules
@@ -714,8 +961,24 @@ paths:
       responses:
         '200':
           description: OK
+  /api/private-league-member/{id}:
+    get:
+      tags:
+        - PrivateLeagues
+      parameters:
+        - name: id
+          in: path
+          description: private league without PL prefix
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
   /api/ladders/{id}:
     get:
+      tags:
+        - Ladder
       summary: Get a ladder by league id. There is a restriction in place on the last ladder entry you are able to retrieve which is set to 15000.
       description: >
         * https://www.pathofexile.com/developer/docs/api-resource-ladders
@@ -782,6 +1045,8 @@ paths:
           description: OK
   /api/pvp-matches:
     get:
+      tags:
+        - PVP
       summary: Get a list of PvP matches.
       parameters:
         - name: type
@@ -813,6 +1078,8 @@ paths:
           description: OK
   /api/public-stash-tabs:
     get:
+      tags:
+        - PublicStashTabs
       summary: Retrieves a list of stashes, accounts, and items as described above in the Introduction section.
       description: |
         * https://www.pathofexile.com/developer/docs/api-resource-public-stash-tabs
@@ -834,6 +1101,8 @@ paths:
           description: OK
   /api/shop/microtransactions/specials:
     get:
+      tags:
+        - MTX
       summary: get today special deals
       parameters:
         - name: type
@@ -848,28 +1117,45 @@ paths:
       responses:
         '200':
           description: OK
+  /api/streams:
+    get:
+      tags:
+        - Streams
+      responses:
+        '200':
+          description: OK
   /api/trade/data/leagues:
     get:
+      tags:
+        - Trade
       responses:
         '200':
           description: OK
   /api/trade/data/items:
     get:
+      tags:
+        - Trade
       responses:
         '200':
           description: OK
   /api/trade/data/stats:
     get:
+      tags:
+        - Trade
       responses:
         '200':
           description: OK
   /api/trade/data/static:
     get:
+      tags:
+        - Trade
       responses:
         '200':
           description: OK
   /api/trade/search/{league}:
     post:
+      tags:
+        - Trade
       summary: trade search function
       parameters:
         - name: league
@@ -891,6 +1177,8 @@ paths:
                 $ref: '#/components/schemas/SearchResult'
   /api/trade/fetch/{items}:
     get:
+      tags:
+        - Trade
       summary: fetch items using search result
       parameters:
         - name: items
@@ -911,6 +1199,8 @@ paths:
           description: OK
   /api/trade/ignore:
     get:
+      tags:
+        - Trade
       summary: List ignored trade accounts
       security:
         - cookieAuth: []
@@ -919,6 +1209,8 @@ paths:
           description: OK
   /api/trade/ignore/{account}:
     put:
+      tags:
+        - Trade
       summary: Ignore a trade account
       security:
         - cookieAuth: []
@@ -932,6 +1224,8 @@ paths:
         '200':
           description: OK
     delete:
+      tags:
+        - Trade
       summary: Unignore a trade account
       security:
         - cookieAuth: []
@@ -944,33 +1238,10 @@ paths:
       responses:
         '200':
           description: OK
-  /api/guild/{guildid}/stash/history:
-    get:
-      summary: List guild stash history
-      security:
-        - cookieAuth: []
-      parameters:
-        - name: guildid
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: from
-          in: query
-          required: false
-          description: unix timestamp
-          schema:
-            type: string
-        - name: fromid
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
   /ladder/export-csv/league/{league}:
     get:
+      tags:
+        - Ladder
       parameters:
         - name: league
           in: path
