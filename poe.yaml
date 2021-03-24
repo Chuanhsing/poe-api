@@ -605,6 +605,60 @@ components:
           type: integer
           example: 1
 paths:
+  /oauth/token:
+    post:
+      tags:
+        - OAuth
+      description: use client_id and client_secret to get oauth token
+      parameters:
+        - name: grant_type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [authorization_code, client_credentials]
+        - name: code
+          description: client code
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: client_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: client_secret
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: redirect_uri
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    maxLength: 40
+                    example: 0123456789012345678901234567890123456789
+                  expires_in:
+                    type: integer
+                    example: 2419200
+                  token_type:
+                    type: string
+                    example: bearer
+                  scope:
+                    type: string
+                    example: service:psapi
   /character-window/get-characters:
     get:
       tags:
@@ -705,6 +759,8 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json: {}
   /character-window/get-stash-items:
     get:
       tags:
@@ -787,6 +843,8 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json: {}
   /character-window/get-account-name-by-character:
     get:
       tags:
@@ -1328,6 +1386,8 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json: {}
   /api/ladders/{id}:
     get:
       tags:
@@ -1438,6 +1498,8 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json: {}
   /api/public-stash-tabs:
     get:
       tags:
@@ -1462,6 +1524,8 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json: {}
   /api/shop/microtransactions/specials:
     get:
       tags:
@@ -1744,6 +1808,8 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json: {}
   /ladder/export-csv/league/{league}:
     get:
       description: 2000 per page
