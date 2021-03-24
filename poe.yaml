@@ -31,6 +31,9 @@ components:
       in: cookie
       name: POESESSID  # cookie name
   schemas:
+    AccountName:
+      type: string
+      example: _Wrex
     UserAgent:
       type: string
       description: |
@@ -105,6 +108,23 @@ components:
             type: integer
           experience:
             type: integer
+    Stash:
+      type: object
+      properties:
+        accountName:
+          $ref: "#/components/schemas/AccountName"
+        lastCharacterName:
+          type: string
+        id:
+          type: string
+        stash:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+        public:
+          type: boolean
     StashItems:
       type: object
       properties:
@@ -181,7 +201,7 @@ components:
           type: object
           properties:
             name:
-              type: string
+              $ref: '#/components/schemas/AccountName'
             realm:
               $ref: '#/components/schemas/Realms'
             challenges:
@@ -473,8 +493,11 @@ components:
     Profile:
       type: object
       properties:
-        name:
+        uuid:
           type: string
+          nullable: true
+        name:
+          $ref: '#/components/schemas/AccountName'
         realm:
           $ref: '#/components/schemas/Realms'
         guild:
@@ -678,8 +701,7 @@ paths:
           in: query
           required: true
           schema:
-            type: string
-            example: _Wrex
+            $ref: '#/components/schemas/AccountName'
       responses:
         '200':
           description: OK
@@ -706,8 +728,7 @@ paths:
           in: query
           required: true
           schema:
-            type: string
-            example: _Wrex
+            $ref: '#/components/schemas/AccountName'
         - name: character
           in: query
           required: true
@@ -742,8 +763,7 @@ paths:
           in: query
           required: true
           schema:
-            type: string
-            example: _Wrex
+            $ref: '#/components/schemas/AccountName'
         - name: character
           in: query
           required: true
@@ -788,7 +808,7 @@ paths:
           in: query
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/AccountName'
         - name: tabs
           in: query
           description: '{0,1} 1 to shows tabs name, position, colors'
@@ -873,7 +893,7 @@ paths:
                 type: object
                 properties:
                   accountName:
-                    type: string
+                    $ref: '#/components/schemas/AccountName'
   /api/account-avatar:
     get:
       tags:
@@ -990,8 +1010,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Profile'
+  /account/view-profile/{accountName}/stashes:
+    get:
+      summary: unique stash
+      description: parse stashId from html and request /account/view-stash/{accountName}/{stashId}
+      tags:
+        - Account
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/AccountName'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/html: {}
+  /account/view-stash/{accountName}/{stashId}:
+    get:
+      summary: unique stash
+      description: parse items from html
+      tags:
+        - Account
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/AccountName'
+        - name: stashId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/html: {}
   /api/guild:
     get:
+      summary: Get Guild
       tags:
         - Guild
       security:
@@ -1174,10 +1238,12 @@ paths:
           in: query
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/AccountName'
       responses:
         '200':
           description: OK
+          content:
+            application/json: {}
   /api/leagues:
     get:
       tags:
@@ -1290,7 +1356,7 @@ paths:
           description: |
             League only: Filters by account name within the first 15000 results.
           schema:
-            type: string
+            $ref: '#/components/schemas/AccountName'
         - name: difficulty
           in: query
           description: |
@@ -1438,7 +1504,7 @@ paths:
           description: |
             League only: Filters by account name within the first 15000 results.
           schema:
-            type: number
+            $ref: '#/components/schemas/AccountName'
         - name: difficulty
           in: query
           description: |
@@ -1525,7 +1591,16 @@ paths:
         '200':
           description: OK
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next_change_id:
+                    type: string
+                  stashes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Stash'
   /api/shop/microtransactions/specials:
     get:
       tags:
