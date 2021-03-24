@@ -34,6 +34,10 @@ components:
     AccountName:
       type: string
       example: _Wrex
+    AccessToken:
+      type: string
+      description: access token from OAuth
+      example: 0123456789012345678901234567890123456789
     UserAgent:
       type: string
       description: |
@@ -639,7 +643,7 @@ paths:
           required: true
           schema:
             type: string
-            enum: [authorization_code, client_credentials]
+            enum: [authorization_code, client_credentials, refresh_token]
         - name: code
           description: client code
           in: query
@@ -670,9 +674,7 @@ paths:
                 type: object
                 properties:
                   access_token:
-                    type: string
-                    maxLength: 40
-                    example: 0123456789012345678901234567890123456789
+                    $ref: '#/components/schemas/AccessToken'
                   expires_in:
                     type: integer
                     example: 2419200
@@ -1003,6 +1005,11 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/UserAgent'
+        - name: access_token
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AccessToken'
       responses:
         '200':
           description: OK
