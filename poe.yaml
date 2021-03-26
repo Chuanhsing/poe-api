@@ -30,6 +30,7 @@ components:
       type: apiKey
       in: cookie
       name: POESESSID  # cookie name
+      description: Priavte mode account need session to get information
   schemas:
     AccountName:
       type: string
@@ -137,9 +138,7 @@ components:
         items:
           type: array
           items:
-            type: array
-            items:
-              $ref: "#/components/schemas/Item"
+            $ref: "#/components/schemas/Item"
     Guild:
       type: object
       properties:
@@ -154,14 +153,19 @@ components:
       properties:
         id:
           type: string
+          example: Race Season One
         startAt:
           type: string
+          example: "2013-02-20T05:47:21Z"
         endAt:
           type: string
+          example: "2013-02-20T05:47:21Z"
         htmlId:
           type: string
+          example: race-season-one
         htmlContent:
           type: string
+          nullable: true
         rewards:
           type: array
           items:
@@ -484,16 +488,22 @@ components:
       properties:
         name:
           type: string
+          example: Mathil1
         image:
           type: string
+          example: https://static-cdn.jtvnw.net/previews-ttv/live_user_mathil1-320x180.jpg
         status:
           type: string
+          example: Mathil - Crit bleed/rupture Puncture Deadeye, crafting/figuring it out
         viewers:
           type: integer
+          example: 4025
         id:
           type: string
+          example: 25575995
         url:
           type: string
+          example: https://twitch.tv/mathil1
     Profile:
       type: object
       properties:
@@ -645,7 +655,13 @@ paths:
             type: string
             enum: [authorization_code, client_credentials, refresh_token]
         - name: code
-          description: client code
+          description: client code, used when grant_type equal client_credentials
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: refresh_token
+          description: used when grant_type equal refresh_token
           in: query
           required: false
           schema:
@@ -691,8 +707,6 @@ paths:
       security:
         - cookieAuth: []
       summary: Get Characters
-      description: >
-        Priavte mode account need session to get information
       parameters:
         - name: User-Agent
           in: header
@@ -717,9 +731,7 @@ paths:
         - Characters
       security:
         - cookieAuth: []
-      summary: Get Items
-      description: >
-        Priavte mode account need session to get information
+      summary: Get Equipment Items
       parameters:
         - name: User-Agent
           in: header
@@ -753,8 +765,6 @@ paths:
       security:
         - cookieAuth: []
       summary: Get Passive Skills
-      description: >
-        Priavte mode account need session to get information
       parameters:
         - name: User-Agent
           in: header
@@ -789,7 +799,7 @@ paths:
         - Account
       security:
         - cookieAuth: []
-      summary: Get Items
+      summary: Get Stash Items
       parameters:
         - name: User-Agent
           in: header
@@ -1581,6 +1591,7 @@ paths:
       description: |
         * https://www.pathofexile.com/developer/docs/api-resource-public-stash-tabs
         * https://pathofexile.gamepedia.com/Public_stash_tab_API
+        * API doesn't contain any historical data and always returns the current state of stash tabs.
       parameters:
         - name: User-Agent
           in: header
@@ -1672,8 +1683,10 @@ paths:
                       properties:
                         id:
                           type: string
+                          example: Standard
                         text:
                           type: string
+                          example: Standard
   /api/trade/data/items:
     get:
       tags:
@@ -1693,6 +1706,7 @@ paths:
                       properties:
                         label:
                           type: string
+                          example: Accessories
                         entries:
                           type: array
                           items:
@@ -1700,15 +1714,21 @@ paths:
                             properties:
                               name:
                                 type: string
+                                example: Ahkeli's Meadow
                               type:
                                 type: string
+                                example: Ruby Ring
                               text:
                                 type: string
+                                example: Ahkeli's Meadow Ruby Ring
                               flags:
                                 type: object
                                 properties:
                                   unique:
                                     type: boolean
+                                  prophecy:
+                                    type: boolean
+                                    example: false
   /api/trade/data/stats:
     get:
       tags:
@@ -1728,6 +1748,7 @@ paths:
                       properties:
                         label:
                           type: string
+                          example: Pseudo
                         entries:
                           type: array
                           items:
@@ -1735,10 +1756,13 @@ paths:
                             properties:
                               id:
                                 type: string
+                                example: pseudo.pseudo_total_cold_resistance
                               text:
                                 type: string
+                                example: +#% total to Cold Resistance
                               type:
                                 type: string
+                                example: pseudo
   /api/trade/data/static:
     get:
       tags:
@@ -1758,8 +1782,10 @@ paths:
                       properties:
                         id:
                           type: string
+                          example: Currency
                         label:
                           type: string
+                          example: Currency
                         entries:
                           type: array
                           items:
@@ -1767,10 +1793,13 @@ paths:
                             properties:
                               id:
                                 type: string
+                                example: alt
                               text:
                                 type: string
+                                example: Orb of Alteration
                               image:
                                 type: string
+                                example: /image/Art/2DItems/Currency/CurrencyRerollMagic.png?v=6d9520174f6643e502da336e76b730d3
   /api/trade/search/{league}:
     post:
       tags:
