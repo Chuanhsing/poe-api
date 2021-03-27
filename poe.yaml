@@ -34,7 +34,7 @@ components:
   schemas:
     AccountName:
       type: string
-      example: _Wrex
+      example: Chris
     AccessToken:
       type: string
       description: access token from OAuth
@@ -68,15 +68,21 @@ components:
       type: object
       properties:
         id:
-          type: string
+          $ref: '#/components/schemas/LeagueNames'
         realm:
           $ref: '#/components/schemas/Realms'
         description:
           type: string
+          example: The default game mode
+        registerAt:
+          type: string
+          example: "2019-09-06T19:00:00Z"
         url:
           type: string
+          example: https://www.pathofexile.com/forum/view-thread/71278
         startAt:
           type: string
+          example: "2013-01-23T21:00:00Z"
         endAt:
           type: string
         delveEvent:
@@ -90,10 +96,13 @@ components:
       properties:
         id:
           type: string
+          example: Hardcore
         name:
           type: string
+          example: Hardcore
         description:
           type: string
+          example: A character killed in Hardcore is moved to its parent league.
     Characters:
       type: array
       items:
@@ -102,17 +111,31 @@ components:
           name:
             type: string
           league:
-            type: string
+            $ref: "#/components/schemas/LeagueNames"
           classId:
             type: integer
+            example: 3
           ascendancyClass:
             type: integer
+            example: 3
           class:
             type: string
+            example: Necromancer
           level:
             type: integer
+            example: 92
           experience:
             type: integer
+            example: 2273293803
+    PublicStashTab:
+      type: object
+      properties:
+        next_change_id:
+          type: string
+        stashes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stash'
     Stash:
       type: object
       properties:
@@ -125,9 +148,7 @@ components:
         stash:
           type: string
         items:
-          type: array
-          items:
-            $ref: "#/components/schemas/Item"
+          $ref: "#/components/schemas/Items"
         public:
           type: boolean
     StashItems:
@@ -136,9 +157,7 @@ components:
         numTabs:
           type: integer
         items:
-          type: array
-          items:
-            $ref: "#/components/schemas/Item"
+          $ref: "#/components/schemas/Items"
     Guild:
       type: object
       properties:
@@ -148,6 +167,44 @@ components:
           type: string
         tag:
           type: string
+    PointTransaction:
+      type: object
+      properties:
+        total:
+          type: integer
+        entries:
+          type: array
+          items:
+            type: object
+    StashHistory:
+      type: object
+      properties:
+        total:
+          type: integer
+        entries:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              time:
+                type: integer
+              league:
+                type: string
+              item:
+                type: string
+              action:
+                type: string
+              account:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  realm:
+                    $ref: '#/components/schemas/Realms'
+                  guild:
+                    $ref: '#/components/schemas/Guild'
     Season:
       type: object
       properties:
@@ -228,6 +285,10 @@ components:
             type: array
             items:
               $ref: "#/components/schemas/Ladder"
+    Items:
+      type: array
+      items:
+        $ref: "#/components/schemas/Item"
     Item:
       type: object
       properties:
@@ -455,6 +516,17 @@ components:
         type:
           type: number
           description: The order in which the lines should be displayed
+    ShowCasePins:
+      type: object
+      properties:
+        total:
+          type: integer
+        account:
+          type: string
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShowCasePin'
     ShowCasePin:
       type: object
       properties:
@@ -472,6 +544,16 @@ components:
           type: string
         icon:
           type: string
+    AccountAvatars:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 69
+        collection:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountAvatar'
     AccountAvatar:
       type: object
       properties:
@@ -479,8 +561,10 @@ components:
           type: boolean
         avatar_id:
           type: integer
+          example: 69
         image:
           type: string
+          example: https://www.pathofexile.com/gen/image/WzAsMSx7ImlkIjo2OSwic2l6ZSI6ImF2YXRhciJ9XQ/3121a0cc75/Path_of_Exile_Gallery_Image.jpg
         current:
           type: boolean
     Stream:
@@ -519,6 +603,15 @@ components:
           properties:
             name:
               type: string
+    Specials:
+      type: object
+      properties:
+        total:
+          type: integer
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Microtransaction'
     Microtransaction:
       type: object
       properties:
@@ -561,6 +654,106 @@ components:
               type: boolean
         category:
           type: boolean
+    TradeDataLeagues:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: Standard
+              text:
+                type: string
+                example: Standard
+    TradeDataItems:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+                example: Accessories
+              entries:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Ahkeli's Meadow
+                    type:
+                      type: string
+                      example: Ruby Ring
+                    text:
+                      type: string
+                      example: Ahkeli's Meadow Ruby Ring
+                    flags:
+                      type: object
+                      properties:
+                        unique:
+                          type: boolean
+                        prophecy:
+                          type: boolean
+                          example: false
+    TradeDataStats:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+                example: Pseudo
+              entries:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: pseudo.pseudo_total_cold_resistance
+                    text:
+                      type: string
+                      example: +#% total to Cold Resistance
+                    type:
+                      type: string
+                      example: pseudo
+    TradeDataStatic:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: Currency
+              label:
+                type: string
+                example: Currency
+              entries:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: alt
+                    text:
+                      type: string
+                      example: Orb of Alteration
+                    image:
+                      type: string
+                      example: /image/Art/2DItems/Currency/CurrencyRerollMagic.png?v=6d9520174f6643e502da336e76b730d3
     SearchSource:
       type: object
       properties:
@@ -755,9 +948,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Item"
+                $ref: "#/components/schemas/Items"
   /character-window/get-passive-skills:
     get:
       tags:
@@ -946,14 +1137,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                  collection:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/AccountAvatar'
+                $ref: '#/components/schemas/AccountAvatars'
   /api/account/showcase-pins:
     get:
       tags:
@@ -993,16 +1177,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                  account:
-                    type: string
-                  entries:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ShowCasePin'
+                $ref: '#/components/schemas/ShowCasePins'
   /api/profile:
     get:
       tags:
@@ -1109,14 +1284,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                  entries:
-                    type: array
-                    items:
-                      type: object
+                $ref: '#/components/schemas/PointTransaction'
   /api/guild/point-transactions:
     get:
       tags:
@@ -1136,14 +1304,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                  entries:
-                    type: array
-                    items:
-                      type: object
+                $ref: '#/components/schemas/PointTransaction'
   /api/guild/{guildid}/stash/history:
     get:
       tags:
@@ -1174,34 +1335,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                  entries:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        time:
-                          type: integer
-                        league:
-                          type: string
-                        item:
-                          type: string
-                        action:
-                          type: string
-                        account:
-                          type: object
-                          properties:
-                            name:
-                              type: string
-                            realm:
-                              $ref: '#/components/schemas/Realms'
-                            guild:
-                              $ref: '#/components/schemas/Guild'
+                $ref: '#/components/schemas/StashHistory'
   /api/seasons:
     get:
       tags:
@@ -1427,7 +1561,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/League"
+                  $ref: "#/components/schemas/LeagueRule"
   /api/league-rules/{id}:
     get:
       tags:
@@ -1611,14 +1745,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  next_change_id:
-                    type: string
-                  stashes:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Stash'
+                $ref: '#/components/schemas/PublicStashTab'
   /api/shop/microtransactions/specials:
     get:
       tags:
@@ -1640,14 +1767,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                  entries:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Microtransaction'
+                $ref: '#/components/schemas/Specials'
   /api/streams:
     get:
       tags:
@@ -1674,19 +1794,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: Standard
-                        text:
-                          type: string
-                          example: Standard
+                $ref: '#/components/schemas/TradeDataLeagues'
   /api/trade/data/items:
     get:
       tags:
@@ -1697,38 +1805,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        label:
-                          type: string
-                          example: Accessories
-                        entries:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                example: Ahkeli's Meadow
-                              type:
-                                type: string
-                                example: Ruby Ring
-                              text:
-                                type: string
-                                example: Ahkeli's Meadow Ruby Ring
-                              flags:
-                                type: object
-                                properties:
-                                  unique:
-                                    type: boolean
-                                  prophecy:
-                                    type: boolean
-                                    example: false
+                $ref: '#/components/schemas/TradeDataItems'
   /api/trade/data/stats:
     get:
       tags:
@@ -1739,30 +1816,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        label:
-                          type: string
-                          example: Pseudo
-                        entries:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              id:
-                                type: string
-                                example: pseudo.pseudo_total_cold_resistance
-                              text:
-                                type: string
-                                example: +#% total to Cold Resistance
-                              type:
-                                type: string
-                                example: pseudo
+                $ref: '#/components/schemas/TradeDataStats'
   /api/trade/data/static:
     get:
       tags:
@@ -1773,33 +1827,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: Currency
-                        label:
-                          type: string
-                          example: Currency
-                        entries:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              id:
-                                type: string
-                                example: alt
-                              text:
-                                type: string
-                                example: Orb of Alteration
-                              image:
-                                type: string
-                                example: /image/Art/2DItems/Currency/CurrencyRerollMagic.png?v=6d9520174f6643e502da336e76b730d3
+                $ref: '#/components/schemas/TradeDataStatic'
   /api/trade/search/{league}:
     post:
       tags:
@@ -1851,9 +1879,7 @@ paths:
                 type: object
                 properties:
                   result:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Item'
+                    $ref: '#/components/schemas/Items'
   /api/trade/ignore:
     get:
       tags:
