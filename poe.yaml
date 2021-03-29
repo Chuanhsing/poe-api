@@ -16,7 +16,7 @@ info:
   description: |
     This is a sample PathofExile API.
     You can get new API updates from https://www.pathofexile.com/forum/view-forum/674 and
-    https://www.pathofexile.com/developer/docs/api
+    https://www.pathofexile.com/developer/docs/
   version: "1.0.0"
   title: PathofExile API
   contact:
@@ -43,7 +43,7 @@ components:
       type: string
       description: |
         requested by ggg https://www.pathofexile.com/forum/view-thread/3019033/page/1#p23790007
-      default: https://poedb.tw, contact@me.com
+      default: "OAuth mypoeapp/1.0.0 (contact: mypoeapp@gmail.com)"
     Realms:
       description: |
         The realm of the leagues
@@ -835,6 +835,58 @@ components:
           type: integer
           example: 1
 paths:
+  /oauth/authorize:
+    get:
+      tags:
+        - OAuth
+      description: Generate an authorization URL and allow the user to navigate to it
+      parameters:
+        - name: client_id
+          in: query
+          description: is your registered application's client id.
+          schema:
+            type: string
+            example: example
+        - name: response_type
+          in: query
+          description: is always `code`.
+          schema:
+            type: string
+            enum: [code]
+            default: code
+        - name: scope
+          in: query
+          description: is a space-separated list of requested scopes.
+          schema:
+            type: string
+            example: account:profile
+        - name: state
+          in: query
+          description: is a code or hash that you generate to validate the request.
+          schema:
+            type: string
+            example: 10ceb8104963e91e47a95f4138448ecf
+        - name: redirect_uri
+          in: query
+          description: is the URL that you want the result of the authorization request to be sent to.
+          schema:
+            type: string
+            example: https://example.com
+        - name: prompt
+          in: query
+          description: |
+            can either be `consent` (the default) or `none`:
+            * `consent` will ask the user for consent after making sure they're logged in.
+            * `none` will attempt to re-authorize the request with existing consent. If this is not possible then an error response is immediately returned without the user being prompted.
+          schema:
+            type: string
+            example: consent
+            default: consent
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json: {}
   /oauth/token:
     post:
       tags:
@@ -893,6 +945,24 @@ paths:
                   scope:
                     type: string
                     example: service:psapi
+  /oauth/token/revoke:
+    post:
+      tags:
+        - OAuth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json: {}
+  /oauth/token/introspect:
+    post:
+      tags:
+        - OAuth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json: {}
   /character-window/get-characters:
     get:
       tags:
