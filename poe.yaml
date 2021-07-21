@@ -754,6 +754,15 @@ components:
                     image:
                       type: string
                       example: /image/Art/2DItems/Currency/CurrencyRerollMagic.png?v=6d9520174f6643e502da336e76b730d3
+    TradeChangeIDS:
+      type: object
+      properties:
+        psapi:
+          type: string
+          example: "1227105106-1231696377-1189586900-1330788009-1278983122"
+        forum:
+          type: string
+          example: "23702876"
     SearchSource:
       type: object
       properties:
@@ -1939,6 +1948,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TradeDataStatic'
+  /api/trade/data/change-ids:
+    get:
+      tags:
+        - Trade
+      summary: trade last change ids
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeChangeIDS'
   /api/trade/search/{league}:
     post:
       tags:
