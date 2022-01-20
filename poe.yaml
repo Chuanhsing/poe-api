@@ -58,12 +58,12 @@ components:
       enum:
         - Standard
         - Hardcore
-        - Expedition
-        - Hardcore Expedition
+        - Scourge
+        - Hardcore Scourge
         - SSF Standard
         - SSF Hardcore
-        - SSF Expedition
-        - SSF Expedition HC
+        - SSF Scourge
+        - SSF Scourge HC
     League:
       type: object
       properties:
@@ -2109,3 +2109,153 @@ paths:
           description: OK
           content:
             text/csv: {}
+  /api/league:
+    get:
+      tags:
+        - Leagues
+      summary: New OAuth API
+      responses:
+        '200':
+          description: OK
+  /api/league/{id}:
+    get:
+      tags:
+        - Leagues
+      summary: New OAuth API
+      parameters:
+        - name: id
+          in: path
+          description: The league id.
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
+  /api/league/{id}/ladder:
+    get:
+      tags:
+        - Ladder
+      summary: New OAuth API
+      parameters:
+        - name: id
+          in: path
+          description: The league id.
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
+  /api/pvp-match:
+    get:
+      tags:
+        - PVP
+      summary: New OAuth API
+      responses:
+        '200':
+          description: OK
+  /api/pvp-match/{match}:
+    get:
+      tags:
+        - PVP
+      summary: New OAuth API
+      parameters:
+        - name: match
+          in: path
+          description: The league id.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/character:
+    get:
+      tags:
+        - Account
+      summary: New OAuth API
+      responses:
+        '200':
+          description: OK
+  /api/character/{name}:
+    get:
+      tags:
+        - Account
+      summary: New OAuth API
+      parameters:
+        - name: name
+          in: path
+          description: name of one of the account's characters
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/stash/{league}:
+    get:
+      tags:
+        - Account
+      summary: New OAuth API
+      parameters:
+        - name: league
+          in: path
+          description: name of a Path of Exile league
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/stash/{league}/{stash_id}:
+    get:
+      tags:
+        - Account
+      summary: New OAuth API
+      parameters:
+        - name: league
+          in: path
+          description: name of a Path of Exile league
+          required: true
+          schema:
+            type: string
+        - name: stash_id
+          in: path
+          description: public identifier of a stash tab
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/item-filter:
+    get:
+      tags:
+        - ItemFilter
+      summary: New OAuth API
+      responses:
+        '200':
+          description: OK
+    post:
+      tags:
+        - ItemFilter
+      summary: New OAuth API
+      responses:
+        '200':
+          description: OK
+  /api/item-filter/{id}:
+    get:
+      tags:
+        - ItemFilter
+      summary: New OAuth API
+      parameters:
+        - name: id
+          in: path
+          description: The league id.
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
