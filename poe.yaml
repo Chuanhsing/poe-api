@@ -58,12 +58,12 @@ components:
       enum:
         - Standard
         - Hardcore
-        - Scourge
-        - Hardcore Scourge
+        - Archnemesis
+        - Hardcore Archnemesis
         - SSF Standard
         - SSF Hardcore
-        - SSF Scourge
-        - SSF Scourge HC
+        - SSF Archnemesis
+        - SSF Archnemesis HC
     League:
       type: object
       properties:
@@ -1169,6 +1169,37 @@ paths:
                 properties:
                   accountName:
                     $ref: '#/components/schemas/AccountName'
+  /character-window/view-atlas-skill-tree:
+    get:
+      tags:
+        - Account
+      security:
+        - cookieAuth: []
+      summary: Get Account Atlas Skill Tree
+      parameters:
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserAgent'
+        - name: league
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/LeagueNames'
+        - name: realm
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Realms'
+        - name: accountName
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/AccountName'
+      responses:
+        '200':
+          description: OK
   /api/account-avatar:
     get:
       tags:
