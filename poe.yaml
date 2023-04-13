@@ -58,12 +58,12 @@ components:
       enum:
         - Standard
         - Hardcore
-        - Archnemesis
-        - Hardcore Archnemesis
+        - Crucible
+        - Hardcore Crucible
         - SSF Standard
         - SSF Hardcore
-        - SSF Archnemesis
-        - SSF Archnemesis HC
+        - SSF Crucible
+        - SSF Crucible HC
     League:
       type: object
       properties:
@@ -849,6 +849,7 @@ paths:
       tags:
         - OAuth
       description: Generate an authorization URL and allow the user to navigate to it
+      summary: OAuth 2.0 API
       parameters:
         - name: client_id
           in: query
@@ -901,6 +902,7 @@ paths:
       tags:
         - OAuth
       description: use client_id and client_secret to get oauth token
+      summary: OAuth 2.0 API
       parameters:
         - name: grant_type
           in: query
@@ -956,6 +958,7 @@ paths:
                     example: service:psapi
   /oauth/token/revoke:
     post:
+      summary: OAuth 2.0 API
       tags:
         - OAuth
       responses:
@@ -965,6 +968,7 @@ paths:
             application/json: {}
   /oauth/token/introspect:
     post:
+      summary: OAuth 2.0 API
       tags:
         - OAuth
       responses:
@@ -1146,7 +1150,7 @@ paths:
         - Account
       security:
         - cookieAuth: []
-      summary: Get Account Name
+      summary: ABANDON, Get Account Name
       parameters:
         - name: User-Agent
           in: header
@@ -2144,7 +2148,7 @@ paths:
     get:
       tags:
         - Leagues
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       responses:
         '200':
           description: OK
@@ -2152,7 +2156,7 @@ paths:
     get:
       tags:
         - Leagues
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       parameters:
         - name: id
           in: path
@@ -2167,7 +2171,7 @@ paths:
     get:
       tags:
         - Ladder
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       parameters:
         - name: id
           in: path
@@ -2182,7 +2186,7 @@ paths:
     get:
       tags:
         - PVP
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       responses:
         '200':
           description: OK
@@ -2190,7 +2194,7 @@ paths:
     get:
       tags:
         - PVP
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       parameters:
         - name: match
           in: path
@@ -2205,7 +2209,7 @@ paths:
     get:
       tags:
         - Account
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       responses:
         '200':
           description: OK
@@ -2213,7 +2217,7 @@ paths:
     get:
       tags:
         - Account
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       parameters:
         - name: name
           in: path
@@ -2228,7 +2232,7 @@ paths:
     get:
       tags:
         - Account
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       parameters:
         - name: league
           in: path
@@ -2243,7 +2247,7 @@ paths:
     get:
       tags:
         - Account
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       parameters:
         - name: league
           in: path
@@ -2264,14 +2268,14 @@ paths:
     get:
       tags:
         - ItemFilter
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       responses:
         '200':
           description: OK
     post:
       tags:
         - ItemFilter
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       responses:
         '200':
           description: OK
@@ -2279,7 +2283,7 @@ paths:
     get:
       tags:
         - ItemFilter
-      summary: New OAuth API
+      summary: OAuth 2.0 API
       parameters:
         - name: id
           in: path
